@@ -1,0 +1,7 @@
+{
+  "name": "PictPDF",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
