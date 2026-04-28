@@ -1,0 +1,245 @@
+.preview-bg { --background: #f8f9fa; }
+
+.preview-bg {
+  --background: #f8f9fa;
+}
+
+/* Header Section */
+.preview-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  padding: calc(16px + env(safe-area-inset-top, 24px)) 16px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #f1f5f9;
+
+  .header-card-bg {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+    background: transparent;
+  }
+}
+
+.header-card-bg {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: #eef2ff;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.delete-btn-header {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: #fff1f2;
+  color: #e11d48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.header-text {
+  flex: 1;
+  h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+}
+
+/* Container utama */
+.preview-container {
+  padding: 4px 16px env(safe-area-inset-bottom, 16px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Compact gaps */
+  height: calc(100% - 80px); /* Adjust for header height approx */
+}
+
+.image-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 8px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+  min-height: 200px;
+  height: 48vh; min-height: 350px; max-height: 480px;  /* Limit to 45% of viewport height */
+
+  .preview-image {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    object-fit: contain; /* Prevent distortion */
+    display: block;
+  }
+}
+
+.image-info {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  .page-badge {
+    background: #e0e7ff;
+    color: #4338ca;
+    padding: 4px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 500;
+  }
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+
+  .nav-btn-custom {
+    flex: 1;
+    height: 48px; /* Tighter button */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+
+    ion-icon {
+      font-size: 18px;
+      color: #3880ff;
+    }
+
+    &[disabled] {
+      opacity: 0.4;
+      background: #f1f5f9;
+      color: #94a3b8;
+    }
+  }
+}
+
+.preview-action {
+  .btn-main {
+    --border-radius: 16px;
+    --background: linear-gradient(135deg, #3880ff 0%, #3171e0 100%);
+    --box-shadow: 0 8px 20px rgba(56, 128, 255, 0.2);
+    height: 54px;
+    font-weight: 700;
+    font-size: 15px;
+    margin: 0;
+  }
+}
+
+
+
+.nav-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 6vh; /* Agak diturunkan */
+  margin-bottom: 30px; /* Jarak agar tidak terlalu rapat ke bawah */
+}
+
+.side-nav-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: #3880ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:disabled {
+    opacity: 0.3;
+    background: #f1f5f9;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: default;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.9);
+    background: #f0f7ff;
+  }
+}
+
+.image-wrapper {
+  flex: 1;
+  max-width: calc(100% - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  height: 45vh; /* Ukuran tetap */
+  min-height: 380px;
+  max-height: 500px;
+  
+  .preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Gambar tidak terpotong */
+    border-radius: 12px;
+  }
+}
+
+/* Remove old controls section */
+.controls {
+  display: none !important;
+}

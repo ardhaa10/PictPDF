@@ -18,6 +18,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "webWorkerTsConfig": "tsconfig.worker.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
@@ -31,8 +32,19 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": []
+            "styles": [
+              "src/global.scss",
+              "src/theme/variables.scss",
+              "node_modules/cropperjs/dist/cropper.css"
+            ],
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "cropperjs",
+              "canvg",
+              "raf",
+              "rgbcolor",
+              "jspdf"
+            ]
           },
           "configurations": {
             "production": {
@@ -45,7 +57,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "20kb"
                 }
               ],
               "fileReplacements": [
@@ -79,9 +91,7 @@
             "development": {
               "buildTarget": "app:build:development"
             },
-            "ci": {
-              "progress": false
-            }
+            "ci": {}
           },
           "defaultConfiguration": "development"
         },
@@ -111,7 +121,10 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
+            "styles": [
+              "src/global.scss",
+              "src/theme/variables.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -136,7 +149,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": "b75421f0-2743-43b8-a3fd-e58c64f9b99f"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

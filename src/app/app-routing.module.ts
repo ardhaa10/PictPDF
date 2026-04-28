@@ -11,6 +11,18 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'editor',
+    loadChildren: () => import('./editor/editor.module').then( m => m.EditorPageModule)
+  },
+  {
+    path: 'history',
+    loadChildren: () => import('./history/history.module').then( m => m.HistoryPageModule)
+  },
+  {
+    path: 'preview',
+    loadChildren: () => import('./preview/preview.module').then( m => m.PreviewPageModule)
+  },
 ];
 
 @NgModule({

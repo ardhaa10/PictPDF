@@ -1,0 +1,802 @@
+.home-bg {
+  --background: #f8f9fa;
+}
+
+
+
+/* Header tetap clean */
+ion-toolbar {
+  --background: #f8f9fa;
+  --color: black;
+  box-shadow: none;
+}
+
+/* Container utama */
+.editor-container {
+  padding: 15px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.editor-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #ffffff;
+  padding: calc(16px + env(safe-area-inset-top, 24px)) 16px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #f1f5f9;
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+  }
+}
+
+/* Wrapper khusus untuk memberi kesan kartu melayang meskipun sedang sticky */
+.header-card-bg {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+
+
+
+
+.back-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: none;
+  background: #eef2ff;
+  color: #1d4ed8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+
+
+.form-hint {
+  margin: 8px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.form-hint ion-icon {
+  font-size: 18px;
+  color: #4f46e5;
+  margin-top: 0;
+}
+
+/* Judul */
+.editor-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* AREA CROPPER */
+.crop-container {
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* gambar crop */
+.crop-container img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* tombol crop */
+.crop-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* button style soft */
+.btn-soft {
+  flex: 1;
+  --background: rgba(0, 122, 255, 0.1);
+  --color: #007aff;
+  border-radius: 16px;
+}
+
+/* tombol utama (convert / save) */
+.btn-primary {
+  --background: #007aff;
+  --color: white;
+  border-radius: 16px;
+}
+
+/* LIST GAMBAR */
+.image-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* tiap gambar */
+.image-item {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* gambar */
+.image-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* tombol delete */
+.delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* highlight gambar aktif */
+.image-item.active {
+  border: 2px solid #007aff;
+}
+
+/* input nama PDF */
+.pdf-input {
+  --border-width: 0;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  --background: #f5f5f5;
+  border-radius: 12px;
+  padding: 5px 10px;
+}
+
+.pdf-input ion-input {
+  color: black;
+}
+
+.pdf-input ion-input::part(native)::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.home-bg {
+  --background: #f8f9fa;
+}
+
+/* Removed duplicate .editor-header definition that was overriding safe area padding */
+
+/* OVERLAY CROP – Full-screen immersive editor */
+.crop-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0d0d0d;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* -- Top Bar ----------------------------- */
+.crop-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  padding-top: calc(env(safe-area-inset-top, 12px) + 12px);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  position: relative;
+  z-index: 10;
+}
+
+.crop-topbar-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+
+  &:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.crop-topbar-done {
+  background: rgba(52, 199, 89, 0.2);
+  color: #34c759;
+
+  &:active {
+    background: rgba(52, 199, 89, 0.35);
+  }
+}
+
+.crop-topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  ion-icon {
+    font-size: 20px;
+    color: #a0aeff;
+  }
+}
+
+/* -- Crop Area --------------------------- */
+.crop-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  min-height: 0;
+  overflow: hidden;
+
+  .crop-container {
+    width: 100%;
+    max-height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #111;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .crop-container img {
+    max-width: 100%;
+    display: block;
+    transition: filter 0.2s ease;
+  }
+}
+
+/* -- Aspect Ratio Controls --------------- */
+.crop-controls {
+  padding: 12px 16px;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.crop-ratios {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.crop-filters {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 16px 16px;
+  gap: 12px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  /* Sembunyikan scrollbar tapi tetap bisa di-scroll */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.filter-btn {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  width: 80px;
+  transition: all 0.25s ease;
+
+  span {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.25s ease;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.active {
+    span {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .filter-preview {
+      border: 2.5px solid #3880ff;
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(56, 128, 255, 0.3);
+    }
+  }
+}
+
+.filter-preview {
+  width: 72px;
+  height: 72px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.ratio-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(10px);
+
+  ion-icon {
+    font-size: 20px;
+  }
+
+  &:active {
+    transform: scale(0.93);
+  }
+
+  &.active {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.4);
+    color: #a0aeff;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.15);
+  }
+}
+
+/* -- Bottom Actions ---------------------- */
+.crop-bottom-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 12px);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+}
+
+.crop-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 14px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+
+  ion-icon {
+    font-size: 24px;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.cancel-btn {
+  color: rgba(255, 255, 255, 0.5);
+
+  &:active {
+    color: #ff6b6b;
+  }
+}
+
+.reset-btn {
+  color: rgba(255, 255, 255, 0.5);
+
+  &:active {
+    color: #ffd43b;
+  }
+}
+
+.rotate-btn {
+  color: rgba(255, 255, 255, 0.5);
+
+  &:active {
+    color: #74c0fc;
+  }
+}
+
+.apply-btn {
+  color: #34c759;
+  background: rgba(52, 199, 89, 0.1);
+  border-radius: 14px;
+
+  &:active {
+    background: rgba(52, 199, 89, 0.25);
+    transform: scale(0.9);
+  }
+}
+
+/* GRID GAMBAR */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  padding: 15px;
+}
+
+.image-card {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  aspect-ratio: 3/4;
+  touch-action: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .edit-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: #3880ff;
+    color: white;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .page-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+  }
+}
+
+/* INPUT & TOMBOL */
+.pdf-input-wrapper {
+  padding: 0 15px;
+
+  .custom-input {
+    --background: #fff;
+    --border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+  }
+}
+
+.pdf-action {
+  padding: 20px 15px;
+
+  .btn-main {
+    --border-radius: 12px;
+    --background: #3880ff;
+    height: 50px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+}
+
+.delete-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #eb445a;
+  /* Warna merah */
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+/* Pastikan edit-badge tetap di bawah atau geser dikit */
+.edit-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  // ... rest of style
+}
+
+.pdf-input-container {
+  padding: 20px 16px;
+
+  .input-card {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+
+    .input-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #3880ff;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      margin-left: 4px;
+    }
+  }
+
+  .custom-input {
+    --background: #f9fafb;
+    --border-radius: 12px;
+    --padding-start: 12px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+
+    &:focus-within {
+      border-color: #3880ff;
+      --background: #fff;
+      box-shadow: 0 0 0 3px rgba(56, 128, 255, 0.1);
+    }
+
+    .icon-box {
+      background: #3880ff;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 12px;
+      font-size: 18px;
+    }
+
+    .main-input {
+      font-weight: 500;
+      color: #1f2937;
+      --placeholder-color: #9ca3af;
+    }
+
+    .pdf-ext {
+      font-weight: 600;
+      color: #9ca3af;
+      padding-right: 8px;
+    }
+
+  }
+
+  .cdk-drag-preview {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0.3;
+  }
+
+  .image-grid {
+    touch-action: none;
+  }
+
+  .cdk-drag {
+    transition: transform 0.2s ease;
+  }
+}
+
+/* FIX ADD CARD */
+/* FIX ADD CARD - Pastikan kode ini berada di level paling luar CSS */
+.add-card {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  flex-direction: column !important;
+  background: #ffffff;
+  border: 2px dashed #3880ff;
+  border-radius: 12px;
+  color: #3880ff !important;
+  /* Warna teks biru */
+  font-weight: 500;
+  text-align: center;
+}
+
+.add-card ion-icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+  color: #3880ff;
+}
+
+.add-card div {
+  font-size: 13px;
+  color: #3880ff !important;
+  /* Memaksa warna teks muncul */
+  display: block !important;
+}
+
+/* -- Success Modal Extreme Premium ------------------ */
+.success-modal {
+  --height: auto;
+  --border-radius: 32px 32px 0 0;
+  --box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+  align-items: flex-end;
+
+  &::part(content) {
+    background: #ffffff;
+  }
+
+  .modal-wrapper {
+    padding: 32px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .success-icon-container {
+    width: 80px;
+    height: 80px;
+    background: #f0fdf4;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+    animation: iconPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    .check-icon {
+      width: 48px;
+      height: 48px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 28px;
+      box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
+    }
+  }
+
+  .success-text {
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    p {
+      margin: 0;
+      font-size: 15px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+  }
+
+  .file-info-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px dashed #cbd5e1;
+    margin-bottom: 32px;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+
+    ion-icon {
+      font-size: 18px;
+      color: #3880ff;
+    }
+  }
+
+  .modal-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .share-modal-btn {
+      --padding-top: 16px;
+      --padding-bottom: 16px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .done-modal-btn {
+      --border-radius: 16px;
+      height: 56px;
+      --box-shadow: 0 10px 25px rgba(56, 128, 255, 0.2);
+      font-weight: 700;
+      font-size: 16px;
+    }
+  }
+}
+
+@keyframes iconPop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

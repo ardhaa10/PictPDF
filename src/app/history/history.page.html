@@ -1,0 +1,86 @@
+<ion-content fullscreen class="history-bg">
+  <!-- Header Section -->
+  <div class="history-header">
+    <div class="header-content">
+      <h1>Riwayat PDF</h1>
+      <div class="stats-badge" *ngIf="history.length > 0">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <span>{{ history.length }} PDF</span>
+      </div>
+    </div>
+
+
+    <p class="header-subtitle">Kelola dokumen PDF yang telah Anda buat</p>
+  </div>
+
+  <div class="history-container">
+    <div class="history-list" *ngIf="history.length > 0 && !isLoading">
+      <div class="history-card" *ngFor="let item of history; trackBy: trackByItem">
+        <div class="card-left">
+          <div class="thumbnail-wrapper">
+            <img class="history-thumb" [src]="item.thumbnail" [alt]="item.name" />
+            <div class="thumbnail-overlay">
+              <ion-icon name="document-outline"></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="history-info">
+            <h3 class="file-name">{{ item.name || 'Untitled PDF' }}</h3>
+            <div class="file-meta">
+              <span class="file-date">
+                <ion-icon name="calendar-outline"></ion-icon>
+                {{ item.date | date:'dd MMM yyyy' }}
+              </span>
+              <span class="file-time">
+                <ion-icon name="time-outline"></ion-icon>
+                {{ item.date | date:'HH:mm' }}
+              </span>
+              <span class="file-pages" *ngIf="item.images?.length">
+                <ion-icon name="images-outline"></ion-icon>
+                {{ item.images.length }} halaman
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <ion-button fill="clear" color="primary" (click)="openHistory(item)" class="action-btn">
+            <ion-icon name="eye-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" color="danger" (click)="deleteHistory(item.id)" class="action-btn">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="history.length === 0 && !isLoading">
+      <div class="empty-icon">
+        <ion-icon name="document-outline"></ion-icon>
+      </div>
+      <h3>Belum ada riwayat</h3>
+      <p>Mulai buat PDF pertama Anda untuk melihat riwayat di sini</p>
+      <ion-button routerLink="/home" fill="solid" shape="round" class="create-btn">
+        <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+        Buat PDF Baru
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button type="button" class="nav-item" routerLink="/home">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </button>
+    <button type="button" class="nav-item" (click)="scanAndGoHome()">
+      <ion-icon name="camera-outline"></ion-icon>
+      <span>Scan</span>
+    </button>
+    <button type="button" class="nav-item active" routerLink="/history">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>History</span>
+    </button>
+  </div>
+</ion-content>

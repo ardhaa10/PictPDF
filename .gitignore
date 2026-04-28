@@ -60,11 +60,32 @@ yarn-error.log
 /.nx
 /.nx/cache
 /connect.lock
-/coverage
+/typings
 /libpeerconnection.log
 testem.log
-/typings
+
+# Security & Secrets
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+.env
+.env.*
+/secrets
 
 # System files
 .DS_Store
 Thumbs.db
+
+# Capacitor Android
+/android/build
+/android/app/build
+/android/app/src/main/assets/public
+/android/app/src/main/assets/capacitor.config.json
+/android/app/src/main/assets/capacitor.plugins.json
+/android/app/src/main/res/xml/config.xml
+/android/.gradle
+/android/local.properties
+/android/captures
+/android/capacitor-cordova-android-plugins

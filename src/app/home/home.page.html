@@ -1,20 +1,61 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content fullscreen class="home-bg">
+  <div class="hero-card">
+    <div class="hero-copy">
+      <span class="eyebrow">Selamat datang</span>
+      <h2>Scan. Convert. Done.</h2>
+      <p>Ubah foto menjadi PDF dengan cepat dan mudah.</p>
+    </div>
+  </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="action-list">
+    <button class="action-card" (click)="takeFromCamera()">
+      <div class="action-card-left">
+        <div class="action-icon camera-icon">
+          <ion-icon name="camera-outline"></ion-icon>
+        </div>
+        <div>
+          <h3>Ambil Foto</h3>
+          <p>Gunakan kamera untuk memindai dokumen.</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <button class="action-card" (click)="takeFromGallery()">
+      <div class="action-card-left">
+        <div class="action-icon gallery-icon">
+          <ion-icon name="image-outline"></ion-icon>
+        </div>
+        <div>
+          <h3>Upload dari Galeri</h3>
+          <p>Pilih gambar yang sudah ada di perangkat.</p>
+        </div>
+      </div>
+      <ion-icon name="chevron-forward-outline"></ion-icon>
+    </button>
+  </div>
+
+  <div class="tips-card">
+    <div class="tips-icon">
+      <ion-icon name="bulb-outline"></ion-icon>
+    </div>
+    <div class="tips-content">
+      <p>Pastikan dokumen terang dan fokus untuk hasil yang lebih baik.</p>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button type="button" class="nav-item active" (click)="scrollToTop()">
+      <ion-icon name="home-outline"></ion-icon>
+      <span>Home</span>
+    </button>
+    <button type="button" class="nav-item" (click)="takeFromCamera()">
+      <ion-icon name="camera-outline"></ion-icon>
+      <span>Scan</span>
+    </button>
+    <button type="button" class="nav-item" (click)="goToHistory()">
+      <ion-icon name="time-outline"></ion-icon>
+      <span>History</span>
+    </button>
   </div>
 </ion-content>

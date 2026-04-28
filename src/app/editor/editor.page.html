@@ -1,0 +1,163 @@
+<ion-content fullscreen class="home-bg">
+
+  <input type="file" #fileInput hidden multiple accept="image/*" (change)="onFilesSelected($event)" />
+
+
+  <!-- AREA CROP ? Full-screen immersive editor -->
+  <div class="crop-overlay" *ngIf="selectedImage">
+    <div class="crop-topbar">
+      <button class="crop-topbar-btn" (click)="closeCrop()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+      <div class="crop-topbar-title">
+        <ion-icon name="crop-outline"></ion-icon>
+        <span>Crop & Edit</span>
+      </div>
+      <button class="crop-topbar-btn crop-topbar-done" (click)="cropImage()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="crop-area">
+      <div class="crop-container">
+        <img id="crop-image" [src]="selectedImageSource" [style.filter]="filterStyle(activeFilter)" />
+      </div>
+    </div>
+
+    <div class="crop-filters">
+      <button *ngFor="let filter of filters" type="button" class="filter-btn"
+        [class.active]="activeFilter === filter.value" (click)="setFilter(filter.value)">
+        <div class="filter-preview" [style.backgroundImage]="'url(' + selectedImageSource + ')'"
+          [style.filter]="filter.style"></div>
+        <span>{{ filter.name }}</span>
+      </button>
+    </div>
+
+    <div class="crop-controls">
+      <div class="crop-ratios">
+        <button class="ratio-btn" [class.active]="activeRatio === 0" (click)="setAspectRatio(0)">
+          <ion-icon name="expand-outline"></ion-icon>
+          <span>Bebas</span>
+        </button>
+        <button class="ratio-btn" [class.active]="activeRatio === 1" (click)="setAspectRatio(1)">
+          <ion-icon name="square-outline"></ion-icon>
+          <span>1:1</span>
+        </button>
+        <button class="ratio-btn" [class.active]="activeRatio === 4/3" (click)="setAspectRatio(4/3)">
+          <ion-icon name="tablet-portrait-outline"></ion-icon>
+          <span>4:3</span>
+        </button>
+        <button class="ratio-btn" [class.active]="activeRatio === 16/9" (click)="setAspectRatio(16/9)">
+          <ion-icon name="tv-outline"></ion-icon>
+          <span>16:9</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="crop-bottom-actions">
+      <button type="button" class="crop-action-btn cancel-btn" (click)="closeCrop()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Batal</span>
+      </button>
+      <button type="button" class="crop-action-btn reset-btn" (click)="resetEdit()">
+        <ion-icon name="refresh-outline"></ion-icon>
+        <span>Reset</span>
+      </button>
+      <button type="button" class="crop-action-btn rotate-btn" (click)="rotateCrop()">
+        <ion-icon name="repeat-outline"></ion-icon>
+        <span>Putar</span>
+      </button>
+      <button type="button" class="crop-action-btn apply-btn" (click)="cropImage()">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        <span>Terapkan</span>
+      </button>
+    </div>
+  </div>
+
+
+  <div class="editor-header" *ngIf="!selectedImage">
+    <div class="header-card-bg">
+      <button type="button" class="back-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+      <div class="header-text">
+        <h2>Editor Dokumen</h2>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="editor-container" *ngIf="!selectedImage">
+    <div class="pdf-input-container">
+      <div class="input-card">
+        <div class="input-label">Nama Dokumen</div>
+        <ion-item lines="none" class="custom-input">
+          <ion-input placeholder="Masukkan nama file..." [(ngModel)]="pdfName" class="main-input">
+          </ion-input>
+          <div class="pdf-ext">.pdf</div>
+        </ion-item>
+      </div>
+      <div class="form-hint">
+        <ion-icon name="bulb-outline"></ion-icon>
+        <span> Geser foto untuk menukar urutan halaman. Ketuk ikon pensil untuk mengedit.</span>
+      </div>
+    </div>
+
+    <div class="image-grid" cdkDropList [cdkDropListData]="images" cdkDropListOrientation="vertical"
+      (cdkDropListDropped)="drop($event)">
+
+      <div class="image-card" *ngFor="let img of images; let i = index; trackBy: trackByImg" cdkDrag>
+        <img [src]="img" />
+        <div class="delete-badge" (click)="deleteImage(i); $event.stopPropagation()">
+          <ion-icon name="trash-outline"></ion-icon>
+        </div>
+        <div class="page-tag">{{ i + 1 }}</div>
+        <div class="edit-badge" (click)="selectImage(img, i); $event.stopPropagation()">
+          <ion-icon name="create"></ion-icon>
+        </div>
+      </div>
+
+      <div class="image-card add-card" (click)="fileInput.click()">
+        <ion-icon name="add-outline"></ion-icon>
+        <div>Tambah Foto</div>
+      </div>
+    </div>
+
+    <div class="pdf-action" *ngIf="images.length > 0">
+      <ion-button expand="block" class="btn-main" (click)="createPDF()">
+        Buat dan Bagikan PDF
+      </ion-button>
+    </div>
+  </div>
+
+
+  <ion-modal [isOpen]="isSuccessModalOpen" (didDismiss)="dismissSuccessModal()" class="success-modal">
+    <ng-template>
+      <div class="modal-wrapper">
+        <div class="success-icon-container">
+          <div class="check-icon">
+            <ion-icon name="checkmark-outline"></ion-icon>
+          </div>
+        </div>
+        <div class="success-text">
+          <h2>Berhasil!</h2>
+          <p>Dokumen PDF Anda telah berhasil dibuat dan disimpan.</p>
+        </div>
+        <div class="file-info-badge">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span>{{ (pdfName || "PictPDF") + ".pdf" }}</span>
+        </div>
+        <div class="modal-actions">
+          <ion-button expand="block" fill="solid" color="primary" class="share-modal-btn" (click)="shareLastPDF()">
+            <ion-icon slot="start" name="share-social-outline"></ion-icon>
+            Bagikan PDF
+          </ion-button>
+          <ion-button expand="block" fill="clear" class="done-modal-btn" (click)="dismissSuccessModal()">
+            Selesai
+          </ion-button>
+        </div>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

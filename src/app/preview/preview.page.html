@@ -1,0 +1,56 @@
+<ion-content fullscreen class="preview-bg">
+
+  <!-- Header Section (Floating Style) -->
+  <div class="preview-header">
+    <div class="header-card-bg">
+      <button type="button" class="back-btn" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </button>
+      <div class="header-text">
+        <h2>Preview Foto</h2>
+      </div>
+      <button type="button" class="delete-btn-header" (click)="removeImage()">
+        <ion-icon name="trash-outline"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="preview-container">
+    <div class="nav-image-wrapper">
+      <button 
+        type="button"
+        class="side-nav-btn"
+        (click)="prevImage()"
+        [disabled]="imageIndex === 0">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </button>
+
+      <div class="image-wrapper">
+        <img [src]="selectedImage" alt="Preview" class="preview-image" />
+      </div>
+
+      <button 
+        type="button"
+        class="side-nav-btn"
+        (click)="nextImage()"
+        [disabled]="imageIndex === totalImages - 1">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    </div>
+
+    <div class="image-info">
+      <span class="page-badge">{{ imageIndex + 1 }} / {{ totalImages }}</span>
+      <p>Foto terpilih untuk dokumen</p>
+    </div>
+
+    <div class="preview-action">
+      <ion-button 
+        expand="block" 
+        class="btn-main" 
+        (click)="goToEditor()">
+        Lanjut ke Editor
+      </ion-button>
+    </div>
+    
+  </div>
+</ion-content>

@@ -6,8 +6,32 @@
  * used as an entry point to import other CSS/Sass files to be included in the
  * output CSS.
  * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
+  * https://ionicframework.com/docs/layout/global-stylesheets
+  */
+
+html,
+body,
+ion-app,
+ion-router-outlet,
+.ion-page,
+ion-content,
+.ion-page-invisible,
+app-root {
+  background-color: #1a1a1a !important;
+  background: #1a1a1a !important;
+  --ion-background-color: #1a1a1a !important;
+}
+
+:root {
+  --ion-safe-area-top: env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+/* Force safe area for Android 15 edge-to-edge */
+.plt-android {
+  --ion-safe-area-top: env(safe-area-inset-top);
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}
 
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";
@@ -35,3 +59,219 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+@import "cropperjs/dist/cropper.css";
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+ /* === Premium Custom Alert Styling === */
+ .premium-alert {
+   --background: #ffffff;
+   --backdrop-opacity: 0.7;
+   border-radius: 28px;
+ }
+ 
+ .premium-alert .alert-wrapper {
+   border-radius: 28px !important;
+   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+   padding: 8px;
+   max-width: 320px !important;
+ }
+ 
+ .premium-alert .alert-head {
+   padding: 32px 24px 16px;
+   text-align: center;
+ }
+ 
+ .premium-alert .alert-title {
+   color: #0f172a !important;
+   font-weight: 800;
+   font-size: 22px;
+   letter-spacing: -0.02em;
+ }
+ 
+ .premium-alert .alert-message {
+   color: #475569 !important;
+   font-size: 16px;
+   line-height: 1.6;
+   padding: 0 24px 32px;
+   text-align: center;
+ }
+ 
+ .premium-alert .alert-button-group {
+   padding: 8px 16px 16px;
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+ }
+ 
+ .premium-alert .alert-button {
+   margin: 0 !important;
+   width: 100%;
+   height: 52px;
+   border-radius: 16px !important;
+   text-transform: none !important;
+   font-size: 16px !important;
+   font-weight: 700 !important;
+ }
+ 
+ /* Confirm / Primary Button */
+ .premium-alert .alert-btn-confirm {
+   background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+   color: #ffffff !important;
+   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+ }
+ 
+ /* Cancel / Secondary Button */
+ .premium-alert .alert-btn-cancel {
+   background: #f8fafc !important;
+   color: #64748b !important;
+   border: 1px solid #e2e8f0 !important;
+ }
+ 
+ .premium-alert .alert-button-inner {
+   justify-content: center !important;
+ }
+
+
+/* === Premium Loading Spinner Styling === */
+.premium-loading {
+  --background: #ffffff;
+  --spinner-color: #3880ff;
+  color: #3880ff;
+}
+
+.premium-loading .loading-wrapper {
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+  padding: 20px 24px !important;
+}
+
+.premium-loading .loading-content {
+  color: #3880ff !important;
+  font-weight: 700;
+  font-size: 15px;
+  margin-left: 14px;
+}
+ 
+ /* === Global Premium Design System === */
+ :root {
+   --premium-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+   --premium-shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.12);
+   --premium-radius: 20px;
+   --premium-radius-lg: 24px;
+   --glass-bg: rgba(255, 255, 255, 0.9);
+ }
+ 
+ .premium-card {
+   background: #ffffff;
+   border-radius: var(--premium-radius);
+   box-shadow: var(--premium-shadow);
+   border: 1px solid rgba(15, 23, 42, 0.05);
+   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+ 
+   &:active {
+     transform: scale(0.98);
+     box-shadow: 0 5px 15px rgba(15, 23, 42, 0.05);
+   }
+ }
+ 
+ .premium-header-bg {
+   background: linear-gradient(135deg, #6f5bff, #4d9cff);
+   color: white;
+   padding: calc(30px + env(safe-area-inset-top, 0px)) 24px 30px;
+   border-bottom-left-radius: var(--premium-radius-lg);
+   border-bottom-right-radius: var(--premium-radius-lg);
+   box-shadow: var(--premium-shadow-lg);
+ }
+ 
+ .global-bottom-nav {
+   position: fixed;
+   left: 16px;
+   right: 16px;
+   bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);
+   gap: 10px;
+   padding: 10px;
+   border-radius: 24px;
+   background: var(--glass-bg);
+   backdrop-filter: blur(12px);
+   -webkit-backdrop-filter: blur(12px);
+   box-shadow: var(--premium-shadow-lg);
+   z-index: 1000;
+   border: 1px solid rgba(255, 255, 255, 0.3);
+ }
+ 
+ .nav-item {
+   border: none;
+   background: transparent;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: 4px;
+   color: #94a3b8;
+   font-size: 11px;
+   font-weight: 600;
+   transition: color 0.2s ease;
+ 
+   &.active {
+     color: #4f46e5;
+   }
+ 
+   ion-icon {
+     font-size: 22px;
+   }
+ }
+ 
+ /* Restore Success Modal to White */
+ .success-modal {
+   --background: #ffffff !important;
+   --ion-background-color: #ffffff !important;
+ 
+   .modal-wrapper {
+     background: #ffffff !important;
+     color: #0f172a !important;
+   }
+ 
+   h2 {
+     color: #0f172a !important;
+   }
+ 
+   p {
+     color: #64748b !important;
+   }
+ 
+   .file-info-badge {
+     background: #f1f5f9 !important;
+     color: #334155 !important;
+   }
+ 
+   .done-modal-btn {
+     --color: #64748b !important;
+   }
+ 
+   ion-button {
+     --border-radius: 16px !important;
+     height: 52px !important;
+     margin-top: 8px !important;
+     font-weight: 700 !important;
+     font-size: 14px !important;
+   }
+ 
+   .share-modal-btn {
+     --background: #3880ff !important;
+     --color: #ffffff !important;
+     --box-shadow: 0 4px 12px rgba(56, 128, 255, 0.2) !important;
+   }
+ 
+   .done-modal-btn {
+     --background: #f1f5f9 !important;
+     --color: #475569 !important;
+     --box-shadow: none !important;
+   }
+ }
