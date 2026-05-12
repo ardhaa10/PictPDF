@@ -3,13 +3,16 @@
   <div class="history-header">
     <div class="header-content">
       <h1>Riwayat PDF</h1>
-      <div class="stats-badge" *ngIf="history.length > 0">
-        <ion-icon name="document-text-outline"></ion-icon>
-        <span>{{ history.length }} PDF</span>
+      <div class="header-actions" *ngIf="history.length > 0">
+        <div class="stats-badge">
+          <ion-icon name="document-text-outline"></ion-icon>
+          <span>{{ history.length }} PDF</span>
+        </div>
+        <button class="clear-all-btn" (click)="clearAllHistory()">
+          <ion-icon name="trash-outline"></ion-icon>
+        </button>
       </div>
     </div>
-
-
     <p class="header-subtitle">Kelola dokumen PDF yang telah Anda buat</p>
   </div>
 

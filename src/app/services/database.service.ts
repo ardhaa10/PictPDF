@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,6 @@ export class DatabaseService {
 
   async addHistory(name: string, path: string, thumbnail: string, images: string[]) {
     const date = new Date().toISOString();
-
     const history = await this.getHistory();
 
     history.unshift({
@@ -23,10 +23,18 @@ export class DatabaseService {
       images
     });
 
-    // limit 5 for Native, 2 for Web (due to localStorage 5MB limit)
-    const limit = Capacitor.isNativePlatform() ? 5 : 2;
-    const limited = history.slice(0, limit);
+    // limit 15 for Native, 5 for Web
+    const limit = Capacitor.isNativePlatform() ? 15 : 5;
+    
+    // 🔥 Hapus file fisik untuk item yang terbuang dari limit
+    if (history.length > limit && Capacitor.isNativePlatform()) {
+      const itemsToDelete = history.slice(limit);
+      for (const item of itemsToDelete) {
+        await this.deletePhysicalFiles(item.images);
+      }
+    }
 
+    const limited = history.slice(0, limit);
 
     try {
       if (Capacitor.isNativePlatform()) {
@@ -35,33 +43,23 @@ export class DatabaseService {
           value: JSON.stringify(limited)
         });
       } else {
-        // 🌐 Web: gunakan localStorage
         localStorage.setItem(this.HISTORY_KEY, JSON.stringify(limited));
       }
-      console.log("HISTORY DISIMPAN:", limited);
     } catch (e) {
       console.error("Gagal simpan ke storage:", e);
-      if (e instanceof Error && (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
-        alert("Penyimpanan penuh! Hapus riwayat lama untuk melanjutkan.");
-      }
       throw e;
     }
   }
 
-
   async getHistory(): Promise<any[]> {
     let value: string | null = null;
-
     if (Capacitor.isNativePlatform()) {
       const result = await Preferences.get({ key: this.HISTORY_KEY });
       value = result.value;
     } else {
-      // 🌐 Web: gunakan localStorage
       value = localStorage.getItem(this.HISTORY_KEY);
     }
-
     if (!value) return [];
-
     try {
       return JSON.parse(value);
     } catch {
@@ -70,7 +68,14 @@ export class DatabaseService {
   }
 
   async deleteHistory(id: number) {
-    const history = await this.getHistory();
+    let history = await this.getHistory();
+    const itemToDelete = history.find(item => item.id === id);
+
+    // 🔥 Hapus file fisik jika di mobile
+    if (itemToDelete && Capacitor.isNativePlatform()) {
+      await this.deletePhysicalFiles(itemToDelete.images);
+    }
+
     const filtered = history.filter(item => item.id !== id);
 
     if (Capacitor.isNativePlatform()) {
@@ -79,17 +84,48 @@ export class DatabaseService {
         value: JSON.stringify(filtered)
       });
     } else {
-      // 🌐 Web: gunakan localStorage
       localStorage.setItem(this.HISTORY_KEY, JSON.stringify(filtered));
     }
   }
 
   async clearHistory() {
     if (Capacitor.isNativePlatform()) {
+      const history = await this.getHistory();
+      for (const item of history) {
+        await this.deletePhysicalFiles(item.images);
+      }
       await Preferences.remove({ key: this.HISTORY_KEY });
     } else {
-      // 🌐 Web: gunakan localStorage
       localStorage.removeItem(this.HISTORY_KEY);
+    }
+  }
+
+  private async deletePhysicalFiles(fileNames: string[]) {
+    if (!fileNames || !Array.isArray(fileNames)) return;
+    for (const fileName of fileNames) {
+      try {
+        // Hanya hapus jika itu nama file (bukan base64)
+        if (fileName && !fileName.startsWith('data:') && !fileName.startsWith('http')) {
+          // Jika fileName adalah URL penuh dari Capacitor.convertFileSrc, 
+          // kita perlu mengambil nama filenya saja atau path aslinya.
+          // Namun di PictPDF kita menyimpan nama filenya saja di fileImages.
+          
+          let path = fileName;
+          // Bersihkan jika ada prefix url
+          if (path.includes('_caps_')) {
+             // Ini berarti ini adalah webView path, kita tidak bisa menghapusnya langsung
+             // Tapi di databaseService kita menyimpan fileImages (nama file saja)
+          }
+
+          await Filesystem.deleteFile({
+            path: path,
+            directory: Directory.Data
+          });
+          console.log("File fisik terhapus:", path);
+        }
+      } catch (e) {
+        console.warn("Gagal menghapus file fisik (mungkin sudah terhapus):", fileName);
+      }
     }
   }
 }

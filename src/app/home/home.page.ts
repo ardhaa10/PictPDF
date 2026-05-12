@@ -62,13 +62,17 @@ export class HomePage {
   }
 
   async selectImage(isCamera: boolean, autoPreview: boolean = true): Promise<boolean> {
+    let loading: any = null;
     try {
       if (Capacitor.isNativePlatform()) {
-        await Camera.requestPermissions();
+        const perm = await Camera.checkPermissions();
+        if (perm.camera !== 'granted') {
+          await Camera.requestPermissions();
+        }
       }
 
       const image = await Camera.getPhoto({
-        quality: 50,
+        quality: 60,
         resultType: CameraResultType.DataUrl,
         source: isCamera ? CameraSource.Camera : CameraSource.Photos
       });
@@ -77,8 +81,15 @@ export class HomePage {
         return false;
       }
 
-      const loading = await this.loadingController.create({ message: 'Menyiapkan Gambar...', spinner: 'dots', cssClass: 'premium-loading' });
+      loading = await this.loadingController.create({ 
+        message: 'Menyiapkan Gambar...', 
+        spinner: 'dots', 
+        cssClass: 'premium-loading' 
+      });
       await loading.present();
+      
+      // Memberi waktu browser untuk merender loading indicator sebelum CPU sibuk
+      await new Promise(resolve => setTimeout(resolve, 100));
 
       const resized = await this.resizeImage(image.dataUrl);
 
@@ -93,9 +104,8 @@ export class HomePage {
       } else {
         this.images.push(resized);
       }
+      
       this.cdr.markForCheck();
-
-      await loading.dismiss();
 
       if (autoPreview) {
         this.finalizePreview(this.images.length - 1);
@@ -104,9 +114,11 @@ export class HomePage {
       return true;
     } catch (e) {
       console.error("Gagal mengambil gambar:", e);
-      // Ensure loading closes if failed halfway (though 'loading' scoping might be an issue. Let me refactor it)
-      this.loadingController.dismiss().catch(() => {});
       return false;
+    } finally {
+      if (loading) {
+        await loading.dismiss();
+      }
     }
   }
 
@@ -164,48 +176,57 @@ export class HomePage {
 
 
   async takeFromGallery() {
+    let loading: any = null;
     try {
       // Gunakan pickImages (jamak) bukan getPhoto (tunggal)
       const result = await Camera.pickImages({
-        quality: 50,
+        quality: 60,
         limit: 0 // 0 berarti tidak ada batasan jumlah foto yang dipilih
       });
 
       if (result.photos && result.photos.length > 0) {
-        const loading = await this.loadingController.create({ message: 'Memproses Foto...', spinner: 'dots', cssClass: 'premium-loading' });
+        loading = await this.loadingController.create({ 
+          message: 'Memproses Foto...', 
+          spinner: 'dots', 
+          cssClass: 'premium-loading' 
+        });
         await loading.present();
-        for (let photo of result.photos) {
-          // photo.webPath adalah URL yang bisa dibaca <img>
+        
+        // Memberi waktu browser untuk merender loading indicator
+        await new Promise(resolve => setTimeout(resolve, 100));
 
+        for (let photo of result.photos) {
           // 1. Baca sebagai base64 untuk resize
           const base64 = await this.readAsBase64(photo.webPath);
           const resized = await this.resizeImage(base64);
 
           if (Capacitor.isNativePlatform()) {
-            // 2. Simpan ke file system
             const fileName = await this.saveImageToFile(resized);
-
-            // 3. Ambil WebURL agar bisa muncul di Home
             const fileUri = await Filesystem.getUri({
               directory: Directory.Data,
               path: fileName
             });
             this.images.push(Capacitor.convertFileSrc(fileUri.uri));
           } else {
-            // Jika di browser
             this.images.push(resized);
           }
+          this.cdr.markForCheck();
+          // Yield ke main thread setiap gambar agar spinner tetap berputar
+          await new Promise(resolve => setTimeout(resolve, 0));
         }
-        this.cdr.markForCheck();
 
         // Simpan ke service dan navigasi ke preview
         this.imageService.setImages(this.images);
         this.imageService.setSelectedImageIndex(0);
-        await loading.dismiss();
+        
         this.router.navigate(['/preview']);
       }
     } catch (e) {
-      console.error("User membatalkan pilihan atau error:", e);
+      console.error("Gagal mengambil gambar dari galeri:", e);
+    } finally {
+      if (loading) {
+        await loading.dismiss();
+      }
     }
   }
 

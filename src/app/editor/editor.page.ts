@@ -382,7 +382,22 @@ export class EditorPage implements OnInit {
     return image?.dataUrl ? [image.dataUrl] : [];
   }
 
-  deleteImage(index: number) {
+  async deleteImage(index: number) {
+    const fileName = this.fileImages[index];
+    
+    // Hapus file fisik jika di native
+    if (Capacitor.isNativePlatform() && fileName && !fileName.startsWith('data:')) {
+      try {
+        await Filesystem.deleteFile({
+          path: fileName,
+          directory: Directory.Data
+        });
+        console.log("File fisik dihapus dari editor:", fileName);
+      } catch (e) {
+        console.warn("Gagal hapus file fisik di editor:", e);
+      }
+    }
+
     this.images.splice(index, 1);
     this.originalImages.splice(index, 1);
 
@@ -407,7 +422,8 @@ export class EditorPage implements OnInit {
     }
 
     try {
-      const doc = new jsPDF('p', 'mm', 'a4');
+      // Aktifkan kompresi (true) untuk ukuran file lebih kecil dan hemat RAM
+      const doc = new jsPDF('p', 'mm', 'a4', true);
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
 
@@ -430,14 +446,17 @@ export class EditorPage implements OnInit {
         const x = (pageWidth - width) / 2;
         const y = (pageHeight - height) / 2;
 
-        doc.addImage(imgData, 'JPEG', x, y, width, height);
+        // Gunakan kompresi FAST untuk penambahan gambar
+        doc.addImage(imgData, 'JPEG', x, y, width, height, undefined, 'FAST');
 
         // 🔥 Yield to main thread every page to avoid "frozen UI" appearance
         await new Promise(resolve => setTimeout(resolve, 0));
       }
 
-
-      const fileName = `${this.pdfName || 'PictPDF'}.pdf`;
+      // Bersihkan nama file dari karakter ilegal
+      let sanitizedName = (this.pdfName || 'PictPDF').replace(/[/\\?%*:|"<>]/g, '').trim();
+      if (!sanitizedName) sanitizedName = 'PictPDF';
+      const fileName = `${sanitizedName}.pdf`;
 
       let filePath = '';
 
@@ -445,11 +464,9 @@ export class EditorPage implements OnInit {
       if (Capacitor.isNativePlatform()) {
         const pdfDataUri = doc.output('datauristring');
         if (!pdfDataUri || !pdfDataUri.includes(',')) {
-          throw new Error('Gagal mengekspor data PDF (Format invalid)');
+          throw new Error('Gagal mengekspor data PDF');
         }
         const pdfBase64 = pdfDataUri.split(',')[1];
-
-        console.log("PDF Created, size:", pdfBase64.length);
 
         const result = await Filesystem.writeFile({
           path: fileName,

@@ -9,18 +9,7 @@
   * https://ionicframework.com/docs/layout/global-stylesheets
   */
 
-html,
-body,
-ion-app,
-ion-router-outlet,
-.ion-page,
-ion-content,
-.ion-page-invisible,
-app-root {
-  background-color: #1a1a1a !important;
-  background: #1a1a1a !important;
-  --ion-background-color: #1a1a1a !important;
-}
+
 
 :root {
   --ion-safe-area-top: env(safe-area-inset-top);
@@ -58,7 +47,7 @@ app-root {
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
 
 @import "cropperjs/dist/cropper.css";
 
@@ -274,4 +263,14 @@ app-root {
      --color: #475569 !important;
      --box-shadow: none !important;
    }
+ }
+
+ /* === Custom Toast Styling === */
+ .custom-toast {
+   --background: rgba(15, 23, 42, 0.9);
+   --color: #ffffff;
+   --border-radius: 12px;
+   --button-color: #ffffff;
+   font-weight: 600;
+   text-align: center;
  }

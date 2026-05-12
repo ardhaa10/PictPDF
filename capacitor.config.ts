@@ -4,6 +4,7 @@ const config: CapacitorConfig = {
   appId: 'com.pictpdf.app',
   appName: 'PictPDF',
   webDir: 'www',
+  backgroundColor: "#ffffff",
   plugins: {
     SplashScreen: {
       launchShowDuration: 3000,
