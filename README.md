@@ -8,7 +8,7 @@
 - **Fast Conversion**: Optimized image processing for quick PDF generation.
 - **Offline First**: All processing happens on-device for maximum privacy and speed.
 - **History Tracking**: Keep track of your previously generated PDFs.
-- **Modern UI**: Sleek, premium dark-themed interface designed for the best user experience.
+- **Modern UI**: Clean, minimalist light-themed interface focused on clarity and readability.
 
 ## 🚀 Tech Stack
 
